@@ -165,6 +165,17 @@
     <div class="firework-container"></div>
 
     <script>
+        let startY = 0;
+        window.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            const deltaY = e.touches[0].clientY - startY;
+            if (Math.abs(deltaY) > 10) {
+                e.preventDefault();
+            }
+        });
         const sliderContainer = document.querySelector('.slider-container');
         const userCards = document.querySelectorAll('.user-card');
         const fireworkContainer = document.querySelector('.firework-container');
