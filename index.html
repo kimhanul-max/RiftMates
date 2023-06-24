@@ -27,9 +27,9 @@
         }
 
         .user-card {
-            width: 300px;
+            width: 90vw; /* 변경: 화면 너비에 따라 조정 */
             margin: 10px;
-            padding: 20px;
+            padding: 15px; /* 변경: 내용이 작아지도록 조정 */
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -40,7 +40,7 @@
         }
 
         .user-card.active {
-            display: block;
+            display: flex;
         }
 
         .user-card img {
@@ -104,6 +104,12 @@
 
         /* 핸드폰 사이즈 */
         @media screen and (max-width: 480px) {
+            .slider-container {
+                flex-direction: row;
+                overflow-x: scroll;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
 
             .slider-container::-webkit-scrollbar {
                 display: none;
@@ -151,6 +157,7 @@
         const fireworkContainer = document.querySelector('.firework-container');
         let currentCardIndex = 0;
         let isAnimating = false;
+        let touchStartX = 0; /* 추가: 터치 시작 X 좌표 변수 */
 
         sliderContainer.addEventListener('wheel', (e) => {
             e.preventDefault();
@@ -193,7 +200,7 @@
             slideToCard(currentCardIndex);
         });
 
-        sliderContainer.addEventListener('click', () => {
+        sliderContainer.addEventListener('dblclick', () => {
             if (isAnimating) return;
             isAnimating = true;
             setTimeout(() => {
