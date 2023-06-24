@@ -27,9 +27,9 @@
         }
 
         .user-card {
-            width: 90vw; /* 변경: 화면 너비에 따라 조정 */
+            width: 300px;
             margin: 10px;
-            padding: 15px; /* 변경: 내용이 작아지도록 조정 */
+            padding: 20px;
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -40,7 +40,7 @@
         }
 
         .user-card.active {
-            display: flex;
+            display: block;
         }
 
         .user-card img {
@@ -119,7 +119,7 @@
                 width: 90vw;
                 margin: 10px;
                 padding: 15px;
-                touch-action: auto;
+                touch-action: pan-x;
             }
 
             .user-card.active {
@@ -157,7 +157,6 @@
         const fireworkContainer = document.querySelector('.firework-container');
         let currentCardIndex = 0;
         let isAnimating = false;
-        let touchStartX = 0; /* 추가: 터치 시작 X 좌표 변수 */
 
         sliderContainer.addEventListener('wheel', (e) => {
             e.preventDefault();
@@ -177,23 +176,27 @@
             slideToCard(currentCardIndex);
         });
 
+        let touchStartY = 0;
+        let touchEndY = 0;
+
         sliderContainer.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
         });
 
-        sliderContainer.addEventListener('touchend', (e) => {
-            const touchEndX = e.changedTouches[0].clientX;
-            const touchDiff = touchStartX - touchEndX;
+        sliderContainer.addEventListener('touchmove', (e) => {
+            touchEndY = e.touches[0].clientY;
+        });
 
+        sliderContainer.addEventListener('touchend', () => {
             if (isAnimating) return;
             isAnimating = true;
             setTimeout(() => {
                 isAnimating = false;
             }, 1000); // 스와이프 간격 조정
 
-            if (touchDiff > 0 && currentCardIndex < userCards.length - 1) {
+            if (touchEndY < touchStartY && currentCardIndex < userCards.length - 1) {
                 currentCardIndex++;
-            } else if (touchDiff < 0 && currentCardIndex > 0) {
+            } else if (touchEndY > touchStartY && currentCardIndex > 0) {
                 currentCardIndex--;
             }
 
@@ -237,3 +240,5 @@
     </script>
 </body>
 </html>
+
+
