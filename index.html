@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Rift Mates</title>
-    <link rel="shortcut icon" href="logo.ico" type="image/x-icon">
+    <title>Shake!</title>
+    <link rel="shortcut icon" href="logo.jpeg" type="image/x-icon" style="border-radius: 10000px;">
     <style>
         body {
             margin: 0;
@@ -81,7 +81,8 @@
         .handshake {
             width: 150px;
             height: 150px;
-            background: url(handshake.png) no-repeat;
+            background: url(handshake.jpeg) no-repeat;
+            border-radius: 150px;
             background-size: contain;
             background-position: center;
             animation: handshakeAnimation 1s ease forwards;
@@ -89,8 +90,8 @@
 
         .firework {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
             background-color: #ff3366;
             animation: explode 1s ease forwards;
@@ -141,7 +142,7 @@
     </style>
 </head>
 <body>
-    <h1>Rift Mates</h1>
+    <h1>Shake!</h1>
 
     <div class="slider-container">
         <div class="user-card active">
@@ -259,6 +260,42 @@
                 handshake.remove();
                 firework.remove();
             }, 1000);
+            let touchStartY = 0;
+        let touchEndY = 0;
+        let lastTapTime = 0; // Add this variable to track the time of the last tap
+
+        sliderContainer.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        });
+
+        sliderContainer.addEventListener('touchmove', (e) => {
+            touchEndY = e.touches[0].clientY;
+        });
+
+        sliderContainer.addEventListener('touchend', () => {
+            if (isAnimating) return;
+            isAnimating = true;
+            setTimeout(() => {
+                isAnimating = false;
+            }, 1000); // 스와이프 간격 조정
+
+            if (touchEndY < touchStartY && currentCardIndex < userCards.length - 1) {
+                currentCardIndex++;
+            } else if (touchEndY > touchStartY && currentCardIndex > 0) {
+                currentCardIndex--;
+            }
+
+            slideToCard(currentCardIndex);
+        });
+
+        sliderContainer.addEventListener('touchend', (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTapTime;
+            if (tapLength < 500 && tapLength > 0) { // Check if the tap duration is within the specified time range
+                matchWithFirework();
+            }
+            lastTapTime = currentTime;
+        });
         }
     </script>
 </body>
